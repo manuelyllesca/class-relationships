@@ -1,10 +1,12 @@
 # 6 Types of Class Object Relationships
 
+By Manuel Yllesca
+
 UML has six types of class relationships; **Inheritance, Composition, Aggregation, Association, Dependency, and Realization.**
 
 ```mermaid
 ---
-title: "UML Class Relationship Graphs"
+title: "UML Class Relationships"
 ---
 classDiagram
 direction TB
@@ -34,15 +36,24 @@ direction LR
         class 6. Association
 
     }
-    note "Multiplicity\nAssociative classes should indicate the number of objects per associative relationship. Multiplicity between objects:
-	•	No value: (1)
-	•	int: (e.g., 2 | Exactly two instances are associated from A to B.)
-	•	1..*: (e.g., One to many)
-	•	n..n: (e.g., 2..10 | Specific range)
 
-[Use 0 and a range to indicate that an associative relationship is optional]
-	•	0..1: (e.g., 0..1 | Optional relationship | 0 with a maximum of 1.)
-	•	0..: (e.g., 0.. | Optional relationship | 0 to many.)
+    namespace 6. Association{
+
+        class Student
+        class BookReview
+        class VC
+        class Founder
+    }
+
+    note "Multiplicity\nAssociative classes should indicate the number of objects per associative relationship. Multiplicity between objects:
+	• No value: (1)
+    • int: (e.g., 2 | Exactly two instances are associated from A to B.)
+    • 1..*: (e.g., One to many)
+    • n..n: (e.g., 2..10 | Specific range)
+
+    [0 indicates that an associative relationship is optional]
+    • 0..1: (e.g., 0..1 | Optional relationship | 0 with a maximum of 1.)
+    • 0..: (e.g., 0.. | Optional relationship | 0 to many.)
 
 When each side of an associative relationship has a cardinality/multiplicity value, you must read from right to left (end to beginning), not left to right (beginning to end).
 
@@ -53,17 +64,6 @@ You must read: 1 car is associated with 1 or 2 owners; instead of 1 or 2 owners 
 Owner ––> [1..*] Car
 If the Owner doesn’t have a cardinality value, you read left to right. An empty cardinality implies a default of 1. In that case, you can read: 1 owner has 1 or many cars.
     "
-
-
-
-
-    namespace 6. Association{
-
-        class Student
-        class BookReview
-        class VC
-        class Founder
-    }
 
 
 
@@ -92,11 +92,11 @@ If the Owner doesn’t have a cardinality value, you read left to right. An empt
 
 When creating software in any language, having a solid understanding of these class diagrams will help in organizing and laying down the foundation of your software. Software design isn’t limited to these six types of class relationships, but they serve as a good starting point.
 
-## 1. Generalitation/Inheritance Class Relationship:
+## 1. Generalization/Inheritance Class Relationship:
 
 ### Hints for Usage:
 
-An IS-A relationship. A class “IS-A” specialized version of another class (parent) and uses it as a default/parent base class. Child classes have access to the parent’s methods and properties.
+An IS-A relationship. A class “IS-A” specialized version of another class (parent) and uses it as a default/parent base class. Child classes have access to the default parent’s methods and properties.
 
 Note: Avoid creating inheritance relationships whenever possible, unless for Abstract Classes. Even then, using composition and interface contracts is generally preferred. Follow the principle of “favor composition over inheritance” to maintain better flexibility and reusability in your design.
 
@@ -108,12 +108,19 @@ A class must extend from another concrete or abstract class to be considered of 
 
 ### Method Execution:
 
-A class that extends from another class (parent) acts as a specialized version of that class as it inherits from it and can access, modify, and override properties and methods defined in the parent class. When a child class extends from an abstract class, it inherits access to the default parent schema; like constructor, properties, and methods and must implement all abstract methods required by the abstract class.
+**Extending from a Class:** A class that extends from another class (Concrete class) acts as a specialized version of that class as the subclass is basically inheriting every implementation provided on the parent/super class (E.g. constructor, properties and methods.)
+
+**Extending from an Abstract Class:** When a class extends from an abstract class, it's similar to extending from a Concrete Class but an abstract class may have "abstract methods" which will require logic implementation by the subclasses that extend from it.
+
+1. Abstract classes can't be instantiated on their own.
+2. Abstract classes are useful as a base template for subclasses of a similar type.
+3. Abstract classes are like base templates for subclasses of a similar type to inherit from and provide specific implementation for specific methods.
+4. Abstract classes can provide fully implemented methods and properties for subclasses to use promoting code reusability.
 
 **Naming Standards for Abstract Classes:** Use a prefix such as Base or Abstract before the class name. For example: BaseUser, AbstractUser, or simply use singular class names like Human, Animal, or Vehicle.
 
 ```python
-# Inheritance/Generalitation relationship example #1:
+# Inheritance/Generalization relationship example #1:
 
 # Base Class
 class Character:
@@ -151,7 +158,7 @@ luigi.slide()
 
 #--------------------------------------------------------
 
-#Inheritance/Generalitation relationship example #2:
+#Inheritance/Generalization relationship example #2:
 # Abstract classes are considered part of Inheritance/Generalization
 
 from abc import ABC, abstractmethod
@@ -201,13 +208,17 @@ luigi.slide()
 
 ### Hints for Usage:
 
-"Client - Quick Supplier / Weakest HAS-A Relationship". It's a class to class transitient relationship for a specific purpose Like: getting from the class a local variables, calling a method with no intent of containing or owning the class (E.g. NO: self.instanceName = className() or self.instancePointer = classPointer; CAN BE: instanceName = className() as it's contained within the method scope (not using self.) of the current method, and no further usage besides this operation is intended.). In general; A dependency relationship it's quick with NO INTENT of further interaction with a class as it's only to use and dispose class operation. Is considered the weakest has-a relationship with. It doesn't assigns it to the broader scope than its current execution scope, and only wants something in return or to execute.
+A "Client - Supplier" Relationship. It's a class to class transitient relationship for a specific purpose but is a must-need for the "Client" class to function. For example:
 
-### Requirements:
+1. Getting a class(supplier)-level datatype like an instance, variable, array, list, etc.
+2. Calling a supplier method/logic without the intent of the client class to contain an instance of the supplier class on an assigned class-level local variable. It's considered the weakest "has-a" relationship. Weakest to Strongest has-a class relationships:
+   1. Dependency: Temporary use without ownership.
+   2. Association: Regular connection with possible mutual awareness.
+   3. Aggregation: Whole-part relationship with independent lifecycles.
+   4. Composition: Whole-part relationship with dependent lifecycles.
+3. Unidirectional. Client depends on supplier, not the other way around. Also; supplier is typically unaware of the client class specifics.
 
-Class uses another class without containing in a broader object scope it nor owning it from another class. Class can be instantiated but only for the purpose of executing Not meant to be reused. Can't assign a class wide instance object/nor pointer to the supplier.
-
-Method Execution: Any class can execute
+Examples:
 
 ```python
 #Dependency class relationship example #1
@@ -381,7 +392,7 @@ truck = Truck(Engine, 132) # A class Engine reference not an actual object (Ther
 car.drive()
 ```
 
-## 6. Aggregation:
+## 5. Aggregation:
 
 ### Hints for Usage:
 
@@ -583,7 +594,7 @@ school.show_teachers()
 
 ```
 
-## 4. Association:
+## 6. Association:
 
 ### Hints for usage:
 
