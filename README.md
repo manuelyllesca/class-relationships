@@ -21,9 +21,6 @@ direction TB
 ```
 
 ```mermaid
----
-
----
 classDiagram
 direction LR
 
@@ -37,25 +34,24 @@ direction LR
         class 6. Association
 
     }
-    note for AssociativeClasses "Multiplicity\nAssociative Classes Should Indicate the number of objects per associative relationship. Multiplicity between each other:
+    note "Multiplicity\nAssociative classes should indicate the number of objects per associative relationship. Multiplicity between objects:
+	•	No value: (1)
+	•	int: (e.g., 2 | Exactly two instances are associated from A to B.)
+	•	1..*: (e.g., One to many)
+	•	n..n: (e.g., 2..10 | Specific range)
 
-    No value: (1)
-    int: (E.g: 2 | Two is pass from A to B.
-    1..*: (E.g. | One to Many),
-    n..n: (E.g. 2-10 | Specific range).
+[Use 0 and a range to indicate that an associative relationship is optional]
+	•	0..1: (e.g., 0..1 | Optional relationship | 0 with a maximum of 1.)
+	•	0..: (e.g., 0.. | Optional relationship | 0 to many.)
 
-    [ Use 0 and a range to indicate an associative relationship is optional]
-    0..1: (E.g. 0..1 | Optional relationship | 0 with a max of 1.),
-    0..*: (E.g. 0..10 | Optional relationship | 0 to many.)
+When each side of an associative relationship has a cardinality/multiplicity value, you must read from right to left (end to beginning), not left to right (beginning to end).
 
-    When each side of an associative relationship has a cardinality/multiplicity value, you must read from RIGHT to LEFT (end to beginning),\n not LEFT to RIGHT (beginning to end).
+Example:
+Owner [1..2] ––> [1] Car
+You must read: 1 car is associated with 1 or 2 owners; instead of 1 or 2 owners are associated with 1 car.
 
-    Example:
-    Owner [1..2] ----> [1] Car
-    You MUST read 1 car is (E.g associated) with 1 or 2 owners; instead of 1 or 2 owners are associated with 1 car.
-
-    Owner ----> [1..*] Car
-    Owner doesn't have a cardinality value; then you read LEFT to RIGHT. And empty cardinality means 1. In that case you can read 1 owner has 1 or many car.
+Owner ––> [1..*] Car
+If the Owner doesn’t have a cardinality value, you read left to right. An empty cardinality implies a default of 1. In that case, you can read: 1 owner has 1 or many cars.
     "
 
 
@@ -112,7 +108,7 @@ A class must extend from another concrete or abstract class to be considered of 
 
 ### Method Execution:
 
-A class that inherits from or extends another class (parent) acts as a specialized version of that class and can access, modify, and override properties and methods defined in the parent class. When a child class extends an abstract class, it gains access to the default class schema, values, and properties but must implement all abstract methods required by the abstract class.
+A class that extends from another class (parent) acts as a specialized version of that class as it inherits from it and can access, modify, and override properties and methods defined in the parent class. When a child class extends from an abstract class, it inherits access to the default parent schema; like constructor, properties, and methods and must implement all abstract methods required by the abstract class.
 
 **Naming Standards for Abstract Classes:** Use a prefix such as Base or Abstract before the class name. For example: BaseUser, AbstractUser, or simply use singular class names like Human, Animal, or Vehicle.
 
