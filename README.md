@@ -1,8 +1,20 @@
-# 6 Types of Class Object Relationships
+# 6 Types of Class Relationships
 
 By Manuel Yllesca
 
 UML has six types of class relationships; **Inheritance, Composition, Aggregation, Association, Dependency, and Realization.**
+
+Let's get to it.
+
+- [1. Generalization/Inheritance](#1-generalization-class-relationship)
+- [2. Dependency](#2-dependency-class-relationship)
+- [3. Realization/Interface](#3-realization-class-relationship)
+- [4. Composition](#4-composition-class-relationship)
+- [5. Aggregation](#5-aggregation-class-relationship)
+- [6. Association](#6-association-class-relationship)
+
+- [Multiplicity/Cardinality](#multiplicity--cardinality)
+- [Defining: Instance Object/Instance, Instance Object Pointer/Reference, and Class Reference](#defining-instance-object-instance-object-pointer-class-and-class-reference)
 
 ```mermaid
 ---
@@ -92,15 +104,15 @@ If the Owner doesn’t have a cardinality value, you read left to right. An empt
 
 When creating software in any language, having a solid understanding of these class diagrams will help in organizing and laying down the foundation of your software. Software design isn’t limited to these six types of class relationships, but they serve as a good starting point.
 
-## 1. Generalization/Inheritance Class Relationship:
+## 1. Generalization Class Relationship
 
 ### Hints for Usage:
 
-An IS-A relationship. A class “IS-A” specialized version of another class (parent) and uses it as a default/parent base class. Child classes have access to the default parent’s methods and properties.
+Generalization/Inheritance; A class “IS-A” specialized version of another class (parent) and uses it as a default/parent base class. Child classes have access to the default parent’s methods and properties.
 
 Note: Avoid creating inheritance relationships whenever possible, unless for Abstract Classes. Even then, using composition and interface contracts is generally preferred. Follow the principle of “favor composition over inheritance” to maintain better flexibility and reusability in your design.
 
-Example: class A (child) inherits/extends from class B (parent). class B can be a concrete/standard class or an Abstract Class with abstract methods. class B is the parent/superclass of class A (child).
+Example: class A (child) extends from class B (parent/super class); class B <ins>can be a concrete/standard class</ins> or an <ins>Abstract Class</ins> with abstract methods for a class to implement.
 
 ### Requirements:
 
@@ -267,11 +279,11 @@ processor = DataProcessor("sample data", validator)
 processor.process()
 ```
 
-## 3. Realization/Interface Class Relationship
+## 3. Realization Class Relationship
 
 ### Hints for Usage:
 
-Realization is the relationship between an interface and a class OR COMPONENT that implements the interface. An interface is a contract between a concrete class and the interface where the class commits to fulfill the requirements of the interface.
+Realization/Interface class relationship is the relationship between an interface and a class OR COMPONENT that implements an interface. An interface is a contract between a concrete class and the interface where the class commits to fulfill the requirements of the interface.
 
 An interface has an EMPTY base schema of properties (and its types), methods (and its argument types), or method return signature types for classes to adhere/follow/implement; leading to better code consistency and reliability.
 
@@ -392,7 +404,7 @@ truck = Truck(Engine, 132) # A class Engine reference not an actual object (Ther
 car.drive()
 ```
 
-## 5. Aggregation:
+## 5. Aggregation Class Relationship:
 
 ### Hints for Usage:
 
@@ -594,7 +606,7 @@ school.show_teachers()
 
 ```
 
-## 6. Association:
+## 6. Association Class Relationship:
 
 ### Hints for usage:
 
@@ -694,17 +706,18 @@ Company "1" --> "1..*" Employees:1..* <ins>(Read from Right to Left)</ins>\n(1) 
 DistributionCenter "1..5" --> "*" Orders: * = Many | n..n = 1 to 5\nMany Orders can have Many DistributionCenters
 ```
 
-## Difference Between Object/Instance of a Class vs. Class Reference
+## Defining Instance Object, Instance Object Pointer, Class, and Class Reference
 
-**Object/Instance (of a Class)** Reference: Refers to an existing, already-initialized instance or object of a class. This reference can be passed as an argument to other objects, classes, and methods, allowing them to interact with the specific state and behavior of that object (e.g., modifying, reading, or executing its methods and attributes).
+**Instance Object/Instance (of a Class) Reference**: An instance object of a class is the realization of an object from a class getting a unique identifier stored in memory. An instance object "refererence/pointer" is a pointer holding the unique ID of an already-initialized object in memory. Instance object references are typically passed as arguments to other objects, classes, methods, and functions allowing them to interact with the specific state and behavior of that specific instance object (e.g., modifying, reading, or executing methods and attributes related to that instance object).
+
+> \*The terms “instance object” and “instance” mean the same thing: a realized instance of a class with a unique ID or address in memory. The term “object” is widely used to refer to the same as an “instance object” or “instance,” but it’s not limited to that. An object is a general term for any data structure that can store data and behavior.
 
 **Class Reference:** Refers to the class itself (not initialized; when initialized, it becomes an object/instance of the class). A class reference is typically used for three main purposes:
 
 1. Creating New Instances: Class references allow new instances to be created, which is often used in creational design patterns.
 2. Type Checking: Class references are used to check if an object is an instance of a specific class, ensuring it adheres to the expected type.
-3. Executing Static and Class Methods:
+3. Executing Static and Class Methods.
+   - @staticmethod: A method that behaves like an isolated function within a class. It does not have access to the instance (self) or class (cls) and cannot interact with class-level methods or attributes directly. It is primarily a utility function that is logically related to the class but independent of instance or class state.
+   - @classmethod: A method that takes the class (cls) as its first argument, allowing it to access and modify class-level methods and attributes. A common use case for @classmethod is as an alternative constructor that can accept specific arguments to customize the initialization process and return a new instance with those custom attributes.
 
-- @staticmethod: A method that behaves like an isolated function within a class. It does not have access to the instance (self) or class (cls) and cannot interact with class-level methods or attributes directly. It is primarily a utility function that is logically related to the class but independent of instance or class state.
-
-- @classmethod: A method that takes the class (cls) as its first argument, allowing it to access and modify class-level methods and attributes. A common use case for @classmethod is as an alternative constructor that can accept specific arguments to customize the initialization process and return a new instance with those custom attributes.
-  > Note: While @staticmethod and @classmethod have specific use cases, their excessive use can sometimes make code harder to read and maintain.
+> Note: While @staticmethod and @classmethod have specific use cases, their excessive use can sometimes make code harder to read and maintain.
