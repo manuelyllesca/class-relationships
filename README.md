@@ -108,11 +108,9 @@ When creating software in any language, having a solid understanding of these cl
 
 ### Hints for Usage:
 
-Generalization/Inheritance; A class “IS-A” specialized version of another class (parent) and uses it as a default/parent base class. Child classes have access to the default parent’s methods and properties.
+Generalization/Inheritance: Also known as an “IS-A” relationship, it’s a type of class relationship where a class extends from another class (either a Concrete Class or Abstract Class). The child class is considered a specialized version of the parent class and inherits its methods and properties. The child class can add new methods and properties by defining them within its class, and it can override inherited properties or methods by using the same names as those used in the parent class. If the child class extends from an abstract class, it must implement the methods required by the abstract class.
 
-Note: Avoid creating inheritance relationships whenever possible, unless for Abstract Classes. Even then, using composition and interface contracts is generally preferred. Follow the principle of “favor composition over inheritance” to maintain better flexibility and reusability in your design.
-
-Example: class A (child) extends from class B (parent/super class); class B <ins>can be a concrete/standard class</ins> or an <ins>Abstract Class</ins> with abstract methods for a class to implement.
+> Note: Avoid creating inheritance relationships whenever possible, unless for Abstract Classes. Even then, using composition and interface contracts is generally preferred. Follow the principle of “favor composition over inheritance” to maintain better flexibility and reusability in your design.
 
 ### Requirements:
 
@@ -220,10 +218,10 @@ luigi.slide()
 
 ### Hints for Usage:
 
-A "Client - Supplier" Relationship. It's a class to class transitient relationship for a specific purpose but is a must-need for the "Client" class to function. For example:
+A dependency class relationship (Also known as Client-Supplier relationship) is a unidirectional, temporary relationship between a class A (client) and class B (supplier) for a specific technical purpose. Client (A) depends on supplier (B) to function, and changes made to supplier (B) affect client (A). For example:
 
-1. Getting a class(supplier)-level datatype like an instance, variable, array, list, etc.
-2. Calling a supplier method/logic without the intent of the client class to contain an instance of the supplier class on an assigned class-level local variable. It's considered the weakest "has-a" relationship. Weakest to Strongest has-a class relationships:
+1. Client gets a class(supplier)-level datatype like an instance, variable, array, list, etc.
+2. Client calls a supplier method/logic without the intent of the client class to contain an instance of the supplier class on an assigned class-level local variable. It's considered the weakest "has-a" relationship. Weakest to Strongest has-a class relationships:
    1. Dependency: Temporary use without ownership.
    2. Association: Regular connection with possible mutual awareness.
    3. Aggregation: Whole-part relationship with independent lifecycles.
@@ -283,15 +281,23 @@ processor.process()
 
 ### Hints for Usage:
 
-Realization/Interface class relationship is the relationship between an interface and a class OR COMPONENT that implements an interface. An interface is a contract between a concrete class and the interface where the class commits to fulfill the requirements of the interface.
+A realization class relationship is the commitment between a class and an interface where the class must provide the base requirements (contract) set by the interface.
 
-An interface has an EMPTY base schema of properties (and its types), methods (and its argument types), or method return signature types for classes to adhere/follow/implement; leading to better code consistency and reliability.
+The contract requirements set by an interface can be:
 
-IDEs help comparing argument type checks and method return types by type checking against the interface making it easier and faster for development. Classes can implement one or more interfaces at once, but must provide its own implementation.
+- Method
+  - Names and implementation
+  - Method argument types
+  - Method return types
+- Property
+  - Property implementations
+  - Property data types
 
-Any of the following would apply: When you want polymorphism between a group of classes, when you want to avoid many if/else's and want to start having method arguments that use more type-checking against interfaces/abstractions, when you want to be able to swap between classes to create an instance (creational design patterns: factory, builder, etc.) of an object based on a requirement and want to ensure that the objects are implementing an interface to execute specific method(s).
+An interface provides a foundational template that specifies required properties (and their types), method names (and their argument types), and return types, but without any implementation. Classes that implement an interface must adhere to this structure by defining their own versions of these methods and properties. This ensures that different classes can be used interchangeably, promoting consistency, reliability, and predictability in code, as the structure and types are enforced across implementations.
 
-Example: object NotificationManager can pick between the following classes: email, sms, or push_notification. All three have an interface implementation (E.g. notifiable) which requires them to have their own specific implementation of methods; in this example: .send(). NotificationManager will return the object instance selected OR assign an abstract name for the class selected (E.g. "notification") and execute .send().
+Any of the following scenarios would benefit from using interfaces or abstractions: when you want polymorphism among a group of classes, when you want to reduce complex if/else statements by enforcing type-checked method arguments, or when you need flexibility to swap between classes to create an instance of an object (as seen in creational design patterns like factory or builder patterns). In these cases, ensuring that objects implement a specific interface allows you to guarantee that required methods are available for execution.
+
+Example: A NotificationManager class can select from the following individual classes: Email, SMS, or Whatsapp. Each of these classes implements a shared interface (e.g., Notifiable), which requires them to define their own specific implementation of the .send() method. NotificationManager can either return the instance of the selected notification type or assign it an abstract name (like notification) and then call .send() on it.
 
 ### Benefits of Realization (Using interfaces)
 
@@ -299,15 +305,16 @@ Example: object NotificationManager can pick between the following classes: emai
 2. Enforces a contract that needs to be fulfill by multiple classes.
 3. Loose coupling as classes can interact with other classes by fulfilling a contract instead of a concrete implementation. It's better to write code based on abstraction methods than a concrete implementation for a specific case of class. Swapping between Classes that connect/interact with Classes is easier as they're not bounded together by name but by the contract set by the interface.
 4. Easier to test functionality. E.g. A class with a method that uses a concrete object name to execute is harder than a class that uses an abstract object name of type interface to test. Your testing is easier as objects passed as arguments follow interfaces not concrete names.
-5. Enables polymorphism. You can interchange classes that follow a common interface and execute a method not based on a concrete class but based on a interface contract.
+5. Enables duck typing and polymorphism. You can interchange classes that follow a common interface and execute a method not based on a concrete class but based on a interface contract.
 6. Reusability. Write methods or modules based on interfaces (an abstract behaviour) in mind not a concrete functionality class.
 7. Easy to extend the application design. Interfaces allows you to follow the SOLID principle "Open for extension but close for modification" as modifying functionality may create unexpected results for classes that depend on that code.
 8. Better management of Dependencies. Interfaces enable Dependency Injection. It's better to inject a dependency and type check against an interface (More modular code) than implicitely instantiating an object from another method or constructor class by calling the dependency by its name.
 9. Better code organization. Defining interfaces help separating methods (initial base schema) from implementation (concrete classes implementing) making the codebase easier to maintain.
+10. IDEs support. IDEs would typically compare argument types and method return types against the defined interfaces, making it easier and faster to catch errors in code.
 
 ### Requirements:
 
-On an interface you can only define the protocol class name, the class properties, the method names, method argument types, and method signatures (return value). Nothing else. The completion of the methods must be provided by the concrete class implementing the interface. An interface can't be instantiated on its own, they need a class to implement the interface and fulfill the contract requirements of the interface.
+In an interface, you can only define the protocol’s class name, class properties, method names, argument types, and method signatures (return values). All method implementations must be provided by the concrete class that implements the interface. Interfaces cannot be instantiated on their own; they require a class to implement them and fulfill the contract defined by the interface.
 
 ```python
 from typing import Protocol
