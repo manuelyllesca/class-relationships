@@ -701,7 +701,7 @@ review_exam.review()
 
 ## Multiplicity / Cardinality
 
-When an associative class relationship (Composition, Aggregation, and Association) has multiplicities on each end, you must read from right to left or end to beginning. If only one is provided, then read from left to right.
+When an associative class relationship (Composition, Aggregation, and Association) <ins>has multiplicities on each end</ins>, you must **read from right to left or end to beginning**. If only one is provided, then read from left to right.
 
 ```mermaid
 classDiagram
