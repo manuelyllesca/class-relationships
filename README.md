@@ -16,6 +16,10 @@ Let's get to it.
 - [Multiplicity/Cardinality](#multiplicity--cardinality)
 - [Defining: Instance Object/Instance, Instance Object Pointer/Reference, and Class Reference](#defining-instance-object-instance-object-pointer-class-and-class-reference)
 
+**UML Class Diagram Shapes**
+
+![img](./uml-shapes.jpg)
+
 ```mermaid
 ---
 title: "UML Class Relationships"
@@ -351,12 +355,12 @@ make_payment(paypal_payment, 50.0)   # Output: Processing PayPal payment of $50.
 
 ### Hints for Usage:
 
-Use composition when it is clear that a class (e.g., Owner) “HAS-A” strong relationship with another class (e.g., Component) and that component isn't needed outside Owner. For example, a car, truck, and motorcycle have an Engine. These classes to access Engine could either:
+An instance of a class (Owner) “has-a” or “owns” an instance of another class (Component), which is created within the Owner instance. The lifecycle of the Component instance is fully tied to its Owner. The Component cannot exist outside the Owner instance because it is an essential part of it. When the Owner instance is destroyed, all objects it owns, including the Component instance, are also destroyed.
 
-1. Extend from class Engine (Bad) or
-2. Instantiate an object of class Engine from within the Car, Truck, and Motorcycle class. This is called composition (preferred).
+Example:
+Consider a Vehicle class. In our application, we create three separate instances of Vehicle. The constructor (**init**) of the Vehicle class automatically creates an instance of the Engine class and assigns it to the Vehicle instance. Each Vehicle instance (e.g., Car, Truck, Motorcycle) will have its own unique Engine instance. These Engine instances can be customized independently for each Vehicle instance.
 
-**UML Representation:** The closest class to the filled diamond represents the Owner class, which is the “WHOLE-OF” a Component class. The opposite side of the filled diamond shape is the Component class, indicating that it is a “PART-OF” the Owner class.
+**UML Representation:** Filled diamond shape represents the (Owner) instance object containing another (Component) instance object.
 
 ### Best Practices
 
@@ -364,9 +368,9 @@ When the (E.g. owner) class instantiates an instance object of another class, se
 
 ### Requirements:
 
-A valid composition relationship is when Owner class instantiates an instance object of a Component class within its class. The Component class should not exist without being instantiated by the Owner class. The Owner class owns this object, meaning that if the Owner instance is deleted, the Component goes with it. <ins>\*Note: One or many Owner classes can have their own instances of the Component class.</ins>
+A valid composition relationship is when Owner class instantiates an instance object of a Component class within its class through a constructor. <ins>\*Note: A component class typically belong to a single "type" of class. Many (owner) instances of the same class will have/control their own (component) instance object of the same class.</ins>
 
-### Method Execution:
+### Functionality Implementation:
 
 Methods specific to the (Component) class should be written in the (Component) class; Methods related to both; Owner and Component classes should be written in the (E.g. Owner) class. Methods of (Component) will always be executed through the instance object created in (E.g Owner) class.
 
@@ -415,7 +419,7 @@ car.drive()
 
 ### Hints for Usage:
 
-A class (e.g., Team) “IS-THE-WHOLE-OF” or “HAS-A” relationship with another class (e.g., Player). This means a class (“Whole”) can aggregate an already-existing instance of another class (“Part”) by holding a reference to it. Since the “Part” instance is created independently outside the “Whole,” both “Whole” and “Part” are independently managed, and any changes the “Whole” makes to this shared “Part” instance will affect all other references to that same instance.
+An instance object of a class (e.g., Team) “IS-THE-WHOLE-OF” or “HAS-A” relationship with another instance object of a class (e.g., Player). This means a class (“Whole”) can aggregate an already-existing instance of another class (“Part”) to its instance by holding a reference to it. Since the “Part” instance is created independently outside the “Whole,” both “Whole” and “Part” are independently managed, and any changes the “Whole” makes to this shared “Part” instance will affect all other references to that same instance. In aggregation, the Whole doesn't own the instance/instantiates the instance in itself because "Part" instance may be used by other object instances of another types of classes and they may want to interact with "Part" instances.
 
 Typically, the “Whole” will aggregate the “Part” through its constructor or other methods.
 
@@ -436,13 +440,13 @@ A useful method example would be Whole.pay_players(), which could iterate throug
 - If the Whole instance is deleted, the Part instance remains unchanged, retaining all its attributes, methods, and states.
 - The Whole only holds a reference (e.g., a “link”) to the "Part" instance. Any changes made to the Part by the Whole affect all references to that instance.
 
-### Method Execution:
+### Functionality Implementation:
 
 Methods related to interactions between Whole and Part should be implemented in the Whole class. However, methods specific to the Part should be implemented within the Part class itself, especially if the Part can be aggregated into multiple different types of Wholes.
 
 For example:
 
-- whole class #1: Company
+- Whole class #1: Company
 - Whole class #2: House
 - Part class #1: Person
 
@@ -621,7 +625,7 @@ To understand association, it is important to clearly understand composition and
 
 - Association (A uses B) is a weaker association relationship than
 - Aggregation (A has-a/is-whole-of-part B), and aggregation has a weaker association compared to
-- Composition (A owns-a/is-whole-of-part B), which is the strongest form of an associative relationship.
+- Composition (A OWNS-a/is-whole-of-part/no-other-classes-but-A-needs B), which is the strongest form of an associative relationship.
 
 To clarify: An association is a connection or relationship between two objects (similar to aggregation and composition) that isn’t composition or aggregation, often representing a sporadic or technical relationship to solve a specific purpose.
 
